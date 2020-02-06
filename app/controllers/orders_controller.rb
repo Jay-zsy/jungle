@@ -1,8 +1,7 @@
 class OrdersController < ApplicationController
   def show
     @order = Order.find(params[:id])
-    @hash = @order.line_items.map { |el| { el["product_id"] => el["quantity"] } }
-    @cart = @hash.reduce Hash.new, :merge
+    @cart = Hash[@order.line_items.map { |el| [el["product_id"], el["quantity"]] }]
     @products = Product.where(id: @cart.keys).map { |product| { product: product, quantity: cart[product.id.to_i] } }
   end
 
